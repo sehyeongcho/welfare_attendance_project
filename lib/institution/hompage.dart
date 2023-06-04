@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:welfare_attendance_project/app_state.dart';
 import 'package:welfare_attendance_project/institution/registerclasspage.dart';
 import 'package:welfare_attendance_project/institution/registerteacherpage.dart';
@@ -62,7 +63,8 @@ class _HomePageState extends State<HomePage> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text('강사목록'),
+        centerTitle: true,
+        title: const Text('강사목록'),
         leading: IconButton(
           icon: const Icon(
             Icons.person,
@@ -81,9 +83,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 20,
-              ),
+              const SizedBox(width: 24.0),
               ElevatedButton(
                   onPressed: () async {
                     // late var check;
@@ -109,10 +109,8 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => RegisterClassPage()),
                     );
                   },
-                  child: Text('강의등록')),
-              SizedBox(
-                width: 20,
-              ),
+                  child: const Text('강의등록')),
+              const SizedBox(width: 24.0),
               ElevatedButton(
                   onPressed: () async {
                     // late var check;
@@ -138,10 +136,8 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => RegisterTeacherPage()),
                     );
                   },
-                  child: Text('강사등록')),
-              SizedBox(
-                width: 20,
-              ),
+                  child: const Text('강사등록')),
+              const SizedBox(width: 24.0),
             ],
           ),
           StreamBuilder<QuerySnapshot>(
@@ -153,47 +149,94 @@ class _HomePageState extends State<HomePage> {
               }
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
 
-              if (snapshot.data!.size == 0)
-                return Center(
-                  child: Text('There is no item!'),
+              if (snapshot.data!.size == 0) {
+                return const Center(
+                  child: Text('등록된 강사가 없습니다'),
                 );
-              print('here');
+              }
+              // print('here');
               return Expanded(
                 child: GridView.count(
-                  crossAxisCount: 2,
+                  crossAxisCount: 1,
                   padding: const EdgeInsets.all(16.0),
-                  childAspectRatio: 8.0 / 9.0,
+                  childAspectRatio: 5.0 / 2.0,
                   children: snapshot.data!.docs
                       .map((DocumentSnapshot document) {
                         Map<String, dynamic> data =
                             document.data()! as Map<String, dynamic>;
                         return Card(
                           clipBehavior: Clip.antiAlias,
-                          child: Column(
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
+                              AspectRatio(
+                                aspectRatio: 1 / 1,
+                                child: Lottie.network(
+                                  'https://assets2.lottiefiles.com/packages/lf20_h9rxcjpi.json',
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
                               Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      8.0, 12.0, 8.0, 0.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        data['name'],
-                                        maxLines: 1,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8.0, 12.0, 8.0, 0.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            Text(
+                                              data['name'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                              maxLines: 1,
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            Text(
+                                              data['phonenumber'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            ),
+                                            Text(
+                                              data['birthday'],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      const SizedBox(height: 8.0),
-                                      Text(data['phonenumber']),
-                                      Text(data['birthday'])
-                                    ],
-                                  ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: <Widget>[
+                                        TextButton(
+                                          child: const Text('more'),
+                                          onPressed: () {
+                                            // Navigator.push(
+                                            //   context,
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         DetailScreen(product: product),
+                                            //   ),
+                                            // );
+                                          },
+                                        ),
+                                        const SizedBox(width: 8),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
