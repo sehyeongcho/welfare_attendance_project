@@ -45,11 +45,14 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
         centerTitle: true,
+        title: const Text('프로필'),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.exit_to_app, semanticLabel: 'logout'),
+            icon: const Icon(
+              Icons.exit_to_app,
+              semanticLabel: 'logout',
+            ),
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               await GoogleSignIn().signOut();
@@ -59,38 +62,44 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 40.0),
+        padding: const EdgeInsets.all(24.0),
         shrinkWrap: true,
         children: [
-          AspectRatio(aspectRatio: 1 / 1, child: Image.network(profilePhoto)),
           SizedBox(
-            height: 10,
+            width: 200.0,
+            height: 200.0,
+            child: AspectRatio(
+              aspectRatio: 1 / 1,
+              child: Image.network(profilePhoto),
+            ),
           ),
+          const SizedBox(height: 12.0),
           Text(
             '<$uid>',
-            style: TextStyle(fontSize: 20),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-          Divider(
+          const SizedBox(height: 12.0),
+          const Divider(
             thickness: 2.0,
           ),
-          SizedBox(
-            height: 20,
+          const SizedBox(height: 12.0),
+          Text(
+            emailAddress,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-          Text(emailAddress, style: TextStyle(fontSize: 20)),
-          SizedBox(
-            height: 30,
-          ),
+          const SizedBox(height: 12.0),
           Text(
             name,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
-          SizedBox(
-            height: 10,
-          ),
-          QrImageView(
-            data: FirebaseAuth.instance.currentUser!.uid,
-            version: QrVersions.auto,
-            size: 200,
-            gapless: false,
+          const SizedBox(height: 12.0),
+          Center(
+            child: QrImageView(
+              data: FirebaseAuth.instance.currentUser!.uid,
+              version: QrVersions.auto,
+              size: 200,
+              gapless: false,
+            ),
           )
         ],
       ),
