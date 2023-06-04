@@ -178,8 +178,8 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           qrcode == ''
-                              ? Text('강사의 qrcode를 인증해 주세요')
-                              : Text('인증되었습니다'),
+                              ? Expanded(child: Text('강사의 qrcode를 인증해 주세요'))
+                              : Expanded(child: Text('인증되었습니다')),
                           SizedBox(
                             width: 20,
                           ),
@@ -222,14 +222,12 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                                     check = value.docs.length;
                                   });
                                   // print('null : ${nullcheck}');
-                                  if (check > 0)
-                                    {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                              content:
-                                              Text('이미 등록된 강사입니다')));
-                                      return;
-                                    }
+                                  if (check > 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text('이미 등록된 강사입니다')));
+                                    return;
+                                  }
                                   late final sheetid;
                                   _maplist.forEach((key, value) {
                                     if (key == dropdownValue)

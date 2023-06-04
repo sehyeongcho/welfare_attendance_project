@@ -4,6 +4,8 @@ import 'package:welfare_attendance_project/startpage.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'app_state.dart';
+import 'color_schemes.g.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +29,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        colorScheme: lightColorScheme,
+        fontFamily: GoogleFonts.nanumGothic().fontFamily,
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 30.0,
+          ),
+        ),
       ),
       home: const StartPage(),
     );
