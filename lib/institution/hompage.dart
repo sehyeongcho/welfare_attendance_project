@@ -11,6 +11,8 @@ import '../profilepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'detailpage.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -230,13 +232,12 @@ class _HomePageState extends State<HomePage> {
                                           TextButton(
                                             child: const Text('상세보기'),
                                             onPressed: () {
-                                              // Navigator.push(
-                                              //   context,
-                                              //   MaterialPageRoute(
-                                              //     builder: (context) =>
-                                              //         DetailScreen(product: product),
-                                              //   ),
-                                              // );
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const DetailPage()),
+                                              );
                                             },
                                           ),
                                           const SizedBox(width: 8),
