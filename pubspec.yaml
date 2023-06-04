@@ -38,6 +38,7 @@ dependencies:
   video_player: ^2.6.1
   animated_text_kit: ^4.2.2
   google_fonts: ^4.0.4
+  lottie: ^2.3.2
 dependency_overrides:
   intl: ^0.18.0
 
@@ -86,6 +87,7 @@ flutter:
   assets:
     - assets/diamond.png
     - assets/background.mp4
+    - assets/google_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

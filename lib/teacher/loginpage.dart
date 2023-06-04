@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -96,7 +97,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> storeFireBase() async {
-
     // print('null check : ${FirebaseAuth.instance.currentUser!.uid}');
     // await Future.delayed(Duration(seconds: 1));
 
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
 
     int check = snapshot.docs.length;
     await Future.delayed(Duration(seconds: 1));
-      print('here : $check');
+    print('here : $check');
     // if (check == 0) {
     //   await FirebaseFirestore.instance
     //       .collection('manager')
@@ -120,81 +120,94 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('로그인'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.info_outline,
+              semanticLabel: 'information',
+            ),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
+          padding: const EdgeInsets.all(24.0),
           children: <Widget>[
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('첫 화면으로 돌아가기')),
-            Text('강사 로그인'),
-            const SizedBox(height: 80.0),
+            // TextButton(
+            //   onPressed: () {
+            //   Navigator.pop(context);
+            // },
+            // child: const Text('시작 화면으로 돌아가기'),
+            // ),
+            Center(
+              child: Text(
+                '강사님 환영합니다',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+            const SizedBox(height: 24.0),
             Column(
               children: <Widget>[
-                Image.asset('assets/diamond.png'),
-                const SizedBox(height: 16.0),
-                const Text('SHRINE'),
+                Lottie.network(
+                  'https://assets2.lottiefiles.com/packages/lf20_h9rxcjpi.json',
+                  width: 300,
+                  height: 300,
+                ),
               ],
             ),
-            const SizedBox(height: 120.0),
+            const SizedBox(height: 24.0),
             // TODO: Remove filled: true values (103)
-            FilledButton(
-              style: FilledButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0)),
-                padding: EdgeInsets.all(0.0),
-              ),
-              onPressed: () async{
-                await signInWithGoogle();
-                // try {
-                //   await storeFireBase();
-                // } catch (e) {
-                //   print('Error storing data: $e');
-                // }
-                // storeUserInfo();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.zero,
-                      color: Colors.orange,
-                      child: Icon(Icons.add)),
-                  SizedBox(
-                    width: 10,
+            Center(
+              child: SizedBox(
+                width: 256,
+                height: 64,
+                child: Material(
+                  color: Colors.green.shade100,
+                  borderRadius: BorderRadius.circular(8),
+                  child: InkWell(
+                    onTap: signInWithGoogle,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // const SizedBox(width: 12.0),
+                            Ink.image(
+                              image: const AssetImage('assets/google_logo.png'),
+                              height: 32,
+                              width: 32,
+                            ),
+                            const SizedBox(width: 12.0),
+                            const Text(
+                              'Google 계정으로 로그인',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            // const SizedBox(width: 8),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  Text('Google')
-                ],
+                ),
               ),
             ),
-            const SizedBox(height: 12.0),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0)),
-                padding: EdgeInsets.all(0.0),
-              ),
-              onPressed: () async {
-                await signInAnonymously();
-                // storeUserInfo();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+            const SizedBox(height: 24.0),
+            Center(
+              child: Column(
                 children: [
-                  Container(
-                      height: 50,
-                      width: 50,
-                      margin: EdgeInsets.zero,
-                      color: Colors.black,
-                      child: Icon(Icons.question_mark)),
-                  SizedBox(
-                    width: 10,
+                  Text(
+                    '로그인에 문제가 있는 경우',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  Text('Guest')
+                  Text(
+                    '노인복지시설에 문의해 주시기 바랍니다',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ],
               ),
             ),
