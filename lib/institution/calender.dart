@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-
 class Calender extends StatefulWidget {
-  const Calender({Key? key, this.restorationId,required this.selectedcalender}) : super(key: key);
+  const Calender({Key? key, this.restorationId, required this.selectedcalender})
+      : super(key: key);
   final String? restorationId;
   final Function(String text) selectedcalender;
 
@@ -15,9 +15,9 @@ class _CalenderState extends State<Calender> with RestorationMixin {
   String? get restorationId => widget.restorationId;
 
   final RestorableDateTime _selectedDate =
-  RestorableDateTime(DateTime(2023, 4, 11));
+      RestorableDateTime(DateTime(2023, 4, 11));
   late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
-  RestorableRouteFuture<DateTime?>(
+      RestorableRouteFuture<DateTime?>(
     onComplete: _selectDate,
     onPresent: (NavigatorState navigator, Object? arguments) {
       return navigator.restorablePush(
@@ -27,8 +27,10 @@ class _CalenderState extends State<Calender> with RestorationMixin {
     },
   );
 
-  static Route<DateTime> _datePickerRoute(BuildContext context,
-      Object? arguments,) {
+  static Route<DateTime> _datePickerRoute(
+    BuildContext context,
+    Object? arguments,
+  ) {
     return DialogRoute<DateTime>(
       context: context,
       builder: (BuildContext context) {
@@ -56,25 +58,32 @@ class _CalenderState extends State<Calender> with RestorationMixin {
         _selectedDate.value = newSelectedDate;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-              'Selected: ${_selectedDate.value.day}/${_selectedDate.value
-                  .month}/${_selectedDate.value.year}'),
+              'Selected: ${_selectedDate.value.day}/${_selectedDate.value.month}/${_selectedDate.value.year}'),
         ));
-        widget.selectedcalender('${_selectedDate.value.year}/${_selectedDate.value
-            .month}/${_selectedDate.value.day}');
+        widget.selectedcalender(
+            '${_selectedDate.value.year}/${_selectedDate.value.month}/${_selectedDate.value.day}');
       });
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 150,
-      child: OutlinedButton(
+      width: 100.0,
+      child: ElevatedButton(
         onPressed: () {
           _restorableDatePickerRouteFuture.present();
         },
-        child: const Text('select date'),
+        child: const Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.calendar_month),
+              SizedBox(width: 4.0),
+              Text('달력'),
+            ],
+          ),
+        ),
       ),
     );
   }

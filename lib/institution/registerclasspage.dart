@@ -67,8 +67,8 @@ class _RegisterClassPageState extends State<RegisterClassPage> {
     classlist = appState.classlist;
     return Scaffold(
       appBar: AppBar(
-        title: Text('강의등록'),
         centerTitle: true,
+        title: const Text('강의등록'),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showspiner,
@@ -76,107 +76,131 @@ class _RegisterClassPageState extends State<RegisterClassPage> {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                    '꼭 순서대로 따라해주세요!\n1.먼저 구글드라이브에서 출석을 관리하고 싶은 강의의 엑셀파일을 만든다\n 2.만든 엑셀 파일에아래의 이메일주소를 편집자로 공유한다\nattendancesheet@welfare-attendance-388218.iam.gserviceaccount.com  \n 3.엑셀파일과 같은 이름을 아래에 입력한다'),
-                SizedBox(
-                  height: 10,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.all(24.0),
+            children: [
+              // Text(
+              //     '꼭 순서대로 따라해주세요!\n1.먼저 구글드라이브에서 출석을 관리하고 싶은 강의의 엑셀파일을 만든다\n 2.만든 엑셀 파일에아래의 이메일주소를 편집자로 공유한다\nattendancesheet@welfare-attendance-388218.iam.gserviceaccount.com  \n 3.엑셀파일과 같은 이름을 아래에 입력한다'),
+              const Text(
+                '반드시 아래의 순서대로 진행해 주세요!',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.0,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '이름을 입력해주세요';
-                            }
-                            return null;
-                          },
-                          controller: _nameController,
-                          decoration: const InputDecoration(
-                            filled: true,
-                            labelText: '강의 이름',
-                          ),
+              ),
+              const SizedBox(height: 12.0),
+              Text(
+                '1. 먼저 구글 드라이브에서 출석을 관리하고자 하는 강의의 엑셀 파일을 생성해 주세요\n(※ [새로 만들기] - [Google 스프레드시트] 클릭)',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 12.0),
+              Text(
+                '2. 생성한 엑셀 파일에서 아래의 이메일 주소를 편집자로 공유해 주세요\n(※ [공유] 클릭 - [사용자 및 그룹 추가] 칸에 아래의 이메일 주소 입력 - [전송] 클릭)',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const Text(
+                'attendancesheet@welfare-attendance-388218.iam.gserviceaccount.com',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12.0),
+              Text(
+                '3. 엑셀 파일의 이름을 아래의 [강의 이름] 칸에 입력하신 후 [등록] 버튼을 눌러주세요\n(※ 엑셀 파일의 이름은 강의 이름과 동일해야 합니다)',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 12.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '강의 이름을 입력해주세요';
+                          }
+                          return null;
+                        },
+                        controller: _nameController,
+                        decoration: const InputDecoration(
+                          filled: true,
+                          labelText: '강의 이름',
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    FilledButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              showspiner = true;
-                            });
-                            final sheetid = await find_sheetid();
-                            setState(() {
-                              showspiner = false;
-                            });
-                            if (sheetid == "")
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text('생성한 엑셀 파일 이름을 정확히 입력해주세요')));
-                            else {
-                              await FirebaseFirestore.instance
-                                  .collection('manager')
-                                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                                  .update(<String, dynamic>{
-                                _nameController.text.trim(): [false, sheetid],
-                              });
-                              // await FirebaseFirestore.instance
-                              //     .collection('manager')
-                              //     .doc(FirebaseAuth.instance.currentUser!.uid)
-                              //     .collection('teacher')
-                              // .doc(FirebaseAuth.instance.currentUser!.uid)
-                              // .update(<String,dynamic>{
-                              //   _nameController.text.trim() : false
-                              // });
-                            }
-                          }
-                        },
-                        child: Text('등록'))
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text('강의 리스트'),
-                Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: classlist.length,
-                    itemBuilder: (context, index) {
-                      var value = classlist[index];
-
-                      return ListTile(
-                        leading: Text(value),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            FirebaseFirestore.instance
+                  ),
+                  const SizedBox(width: 12.0),
+                  ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            showspiner = true;
+                          });
+                          final sheetid = await find_sheetid();
+                          setState(() {
+                            showspiner = false;
+                          });
+                          if (sheetid == "")
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text('생성한 엑셀 파일 이름을 정확하게 입력해 주세요')));
+                          else {
+                            await FirebaseFirestore.instance
                                 .collection('manager')
                                 .doc(FirebaseAuth.instance.currentUser!.uid)
                                 .update(<String, dynamic>{
-                              value: FieldValue.delete()
+                              _nameController.text.trim(): [false, sheetid],
                             });
+                            // await FirebaseFirestore.instance
+                            //     .collection('manager')
+                            //     .doc(FirebaseAuth.instance.currentUser!.uid)
+                            //     .collection('teacher')
+                            // .doc(FirebaseAuth.instance.currentUser!.uid)
+                            // .update(<String,dynamic>{
+                            //   _nameController.text.trim() : false
+                            // });
+                          }
+                        }
+                      },
+                      child: const Text('등록'))
+                ],
+              ),
+              const SizedBox(height: 12.0),
+              Text(
+                '강의 리스트',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                itemCount: classlist.length,
+                itemBuilder: (context, index) {
+                  var value = classlist[index];
 
-                            // print(
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+                  return ListTile(
+                    leading: Text(
+                      value,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        FirebaseFirestore.instance
+                            .collection('manager')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update(
+                                <String, dynamic>{value: FieldValue.delete()});
+
+                        // print(
+                      },
+                    ),
+                  );
+                },
+              )
+            ],
           ),
         ),
       ),

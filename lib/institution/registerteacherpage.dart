@@ -50,8 +50,8 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
       dropdownValue = _maplist.keys.length == 0 ? '' : _maplist.keys.first;
     return Scaffold(
       appBar: AppBar(
-        title: Text('강사등록'),
         centerTitle: true,
+        title: const Text('강사등록'),
       ),
       body: GestureDetector(
         onTap: () {
@@ -60,19 +60,104 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 12.0),
               Form(
                 key: _formKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: const EdgeInsets.all(24.0),
                   child: Column(
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        height: 12,
+                      // const SizedBox(height: 12.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: 100.0,
+                            // height: 50.0,
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  if (qrcode == '') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                '등록할 강사의 QR 코드를 인증해 주세요')));
+                                    return;
+                                  }
+
+                                  if (_formKey.currentState!.validate()) {
+                                    late var check;
+                                    await FirebaseFirestore.instance
+                                        .collection('teachers')
+                                        .where('teacheruid', isEqualTo: qrcode)
+                                        .get()
+                                        .then((value) {
+                                      check = value.docs.length;
+                                    });
+                                    // print('null : ${nullcheck}');
+                                    if (check > 0) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content: Text('이미 등록된 강사입니다')));
+                                      return;
+                                    }
+                                    late final sheetid;
+                                    _maplist.forEach((key, value) {
+                                      if (key == dropdownValue)
+                                        sheetid = value[1];
+                                    });
+                                    await FirebaseFirestore.instance
+                                        .collection('manager')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                        .update(<String, dynamic>{
+                                      dropdownValue: [true, sheetid],
+                                    });
+
+                                    await FirebaseFirestore.instance
+                                        .collection('manager')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.uid)
+                                        .collection('teacher')
+                                        .add(<String, dynamic>{
+                                      'teacheruid': qrcode,
+                                      'name': _nameController.text.trim(),
+                                      'birthday':
+                                          _calenderController.text.trim(),
+                                      'phonenumber':
+                                          _phonenumberController.text.trim(),
+                                    });
+
+                                    await FirebaseFirestore.instance
+                                        .collection('teachers')
+                                        .doc(qrcode)
+                                      ..set(<String, dynamic>{
+                                        'teacheruid': qrcode,
+                                        dropdownValue: sheetid
+                                      });
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                                child: const Text('등록')),
+                          ),
+                          // SizedBox(
+                          //   width: 20,
+                          // ),
+                          SizedBox(
+                            width: 100.0,
+                            // height: 50.0,
+                            child: FilledButton(
+                              child: const Text('초기화'),
+                              onPressed: () {
+                                _nameController.clear();
+                                _phonenumberController.clear();
+                                _classController.clear();
+                              },
+                            ),
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 12.0),
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -82,13 +167,11 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                         },
                         controller: _nameController,
                         decoration: const InputDecoration(
-                          filled: true,
+                          // filled: true,
                           labelText: '이름',
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 12.0),
                       Row(
                         children: [
                           Expanded(
@@ -101,11 +184,12 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                               },
                               controller: _calenderController,
                               decoration: const InputDecoration(
-                                filled: true,
+                                // filled: true,
                                 labelText: '날짜',
                               ),
                             ),
                           ),
+                          const SizedBox(width: 12.0),
                           Calender(
                             selectedcalender: select_canlender,
                           )
@@ -115,16 +199,17 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return '숫자를 입력해주세요';
+                            return '전화번호를 입력해주세요';
                           }
                           RegExp numberRegex = RegExp(r'^[0-9]+$');
-                          if (!numberRegex.hasMatch(value!))
+                          if (!numberRegex.hasMatch(value!)) {
                             return '숫자만 입력해주세요';
+                          }
                           return null;
                         },
                         controller: _phonenumberController,
                         decoration: const InputDecoration(
-                          filled: true,
+                          // filled: true,
                           labelText: '전화번호',
                         ),
                       ),
@@ -138,13 +223,11 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                         },
                         controller: _classController,
                         decoration: const InputDecoration(
-                          filled: true,
+                          // filled: true,
                           labelText: '강의',
                         ),
                       ),
-                      const SizedBox(
-                        height: 12,
-                      ),
+                      const SizedBox(height: 12.0),
                       _maplist.keys.length > 0
                           ? DropdownButton<String>(
                               value: dropdownValue,
@@ -170,111 +253,36 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                                 );
                               }).toList(),
                             )
-                          : Text('모든 강의가 할당됬거나 등록된 강의가 없습니다'),
-                      const SizedBox(
-                        height: 12,
-                      ),
+                          : const Text('모든 강의가 할당됐거나 등록된 강의가 없습니다'),
+                      const SizedBox(height: 12.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           qrcode == ''
-                              ? Expanded(child: Text('강사의 qrcode를 인증해 주세요'))
-                              : Expanded(child: Text('인증되었습니다')),
-                          SizedBox(
-                            width: 20,
-                          ),
+                              ? const Expanded(
+                                  child: Text('강사의 QR 코드를 인증해 주세요'))
+                              : const Expanded(child: Text('인증되었습니다')),
+                          const SizedBox(width: 12.0),
                           ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => QRScanner(
-                                            getQrcode: get_qrcode,
-                                          )),
-                                );
-                              },
-                              child: Text('qrscan')),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () async {
-                                if (qrcode == '') {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                              Text('등록할 강사의 QRcode를 인증해주세요')));
-                                  return;
-                                }
-
-                                if (_formKey.currentState!.validate()) {
-                                  late var check;
-                                  await FirebaseFirestore.instance
-                                      .collection('teachers')
-                                      .where('teacheruid', isEqualTo: qrcode)
-                                      .get()
-                                      .then((value) {
-                                    check = value.docs.length;
-                                  });
-                                  // print('null : ${nullcheck}');
-                                  if (check > 0) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text('이미 등록된 강사입니다')));
-                                    return;
-                                  }
-                                  late final sheetid;
-                                  _maplist.forEach((key, value) {
-                                    if (key == dropdownValue)
-                                      sheetid = value[1];
-                                  });
-                                  await FirebaseFirestore.instance
-                                      .collection('manager')
-                                      .doc(FirebaseAuth
-                                          .instance.currentUser!.uid)
-                                      .update(<String, dynamic>{
-                                    dropdownValue: [true, sheetid],
-                                  });
-
-                                  await FirebaseFirestore.instance
-                                      .collection('manager')
-                                      .doc(FirebaseAuth
-                                          .instance.currentUser!.uid)
-                                      .collection('teacher')
-                                      .add(<String, dynamic>{
-                                    'teacheruid': qrcode,
-                                    'name': _nameController.text.trim(),
-                                    'birthday': _calenderController.text.trim(),
-                                    'phonenumber':
-                                        _phonenumberController.text.trim(),
-                                  });
-
-                                  await FirebaseFirestore.instance
-                                      .collection('teachers')
-                                      .doc(qrcode)
-                                    ..set(<String, dynamic>{
-                                      'teacheruid': qrcode,
-                                      dropdownValue: sheetid
-                                    });
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              child: Text('등록')),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          FilledButton(
-                            child: const Text('Clear'),
                             onPressed: () {
-                              _nameController.clear();
-                              _phonenumberController.clear();
-                              _classController.clear();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => QRScanner(
+                                          getQrcode: get_qrcode,
+                                        )),
+                              );
                             },
+                            child: const Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.qr_code_2),
+                                  SizedBox(width: 4.0),
+                                  Text('인증'),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
