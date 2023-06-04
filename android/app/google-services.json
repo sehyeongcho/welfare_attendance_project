@@ -14,7 +14,23 @@
       },
       "oauth_client": [
         {
-          "client_id": "389131875767-hk103r4eijeo2ju0i9p2unknmtq3d5c0.apps.googleusercontent.com",
+          "client_id": "389131875767-32na17js9qgjtsibp0jpfqocqbe4ebqs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.welfare_attendance_project",
+            "certificate_hash": "aabc2bd0d17cd9cf419d6140cf91f002038e7f2e"
+          }
+        },
+        {
+          "client_id": "389131875767-v1j4oplcoitvk25pojl23d5i4v6g63k0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.welfare_attendance_project",
+            "certificate_hash": "22ed748924b24bd314e38fadedd86c9078edeb3f"
+          }
+        },
+        {
+          "client_id": "389131875767-3s2e09bk8cul131bhvacgttcisp9dr1q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +43,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "389131875767-hk103r4eijeo2ju0i9p2unknmtq3d5c0.apps.googleusercontent.com",
+              "client_id": "389131875767-3s2e09bk8cul131bhvacgttcisp9dr1q.apps.googleusercontent.com",
               "client_type": 3
             },
             {
