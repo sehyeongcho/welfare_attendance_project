@@ -51,7 +51,10 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('강사등록'),
+        title: Text(
+          '강사등록',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: GestureDetector(
         onTap: () {

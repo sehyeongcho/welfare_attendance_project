@@ -70,7 +70,10 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('강사목록'),
+          title: Text(
+            '강사목록',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           leading: IconButton(
             icon: const Icon(
               Icons.person,

@@ -51,7 +51,10 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('강사수정'),
+        title: Text(
+          '강사수정',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: GestureDetector(
         onTap: () {

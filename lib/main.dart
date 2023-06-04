@@ -32,12 +32,15 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: lightColorScheme,
         fontFamily: GoogleFonts.nanumGothic().fontFamily,
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            color: Colors.white,
-            fontSize: 30.0,
-          ),
-        ),
+        textTheme: TextTheme(
+            titleLarge: const TextStyle(
+              color: Colors.white,
+              fontSize: 30.0,
+            ),
+            titleMedium: TextStyle(
+              fontFamily: GoogleFonts.eastSeaDokdo().fontFamily,
+              fontSize: 36.0,
+            )),
       ),
       home: const StartPage(),
     );

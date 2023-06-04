@@ -122,7 +122,10 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('로그인'),
+        title: Text(
+          '로그인',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(

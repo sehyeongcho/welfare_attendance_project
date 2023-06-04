@@ -68,7 +68,10 @@ class _RegisterClassPageState extends State<RegisterClassPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('강의등록'),
+        title: Text(
+          '강의등록',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: ModalProgressHUD(
         inAsyncCall: showspiner,

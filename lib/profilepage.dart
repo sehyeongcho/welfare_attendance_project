@@ -46,7 +46,10 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('프로필'),
+        title: Text(
+          '프로필',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(

@@ -53,7 +53,10 @@ class _DetailPageState extends State<DetailPage> {
       // ),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('강사정보'),
+        title: Text(
+          '강사정보',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: <Widget>[
           // When you click the pencil icon(Icons.create), you can modify(update) the information of the item
           IconButton(
