@@ -28,6 +28,25 @@ class _HomePageState extends State<HomePage> {
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>?
       classlist_listener = null;
 
+  store_userinfo() async {
+    late var check;
+    await FirebaseFirestore.instance
+        .collection('manager')
+        .where('복지사', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      check = value.docs.length;
+    });
+    // print('null : ${check}');
+    if (check == 0)
+      await FirebaseFirestore.instance
+          .collection('manager')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .set(
+              <String, dynamic>{'복지사': FirebaseAuth.instance.currentUser!.uid});
+    classlist_listener = appState.classlist_listener();
+  }
+
   @override
   void dispose() {
     if (classlist_listener != null) classlist_listener?.cancel();
@@ -37,8 +56,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     appState = context.watch<ApplicationState>();
-    if (classlist_listener == null)
-      classlist_listener = appState.classlist_listener();
+    if (classlist_listener == null) {
+      store_userinfo();
+      // classlist_listener = appState.classlist_listener();
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('강사목록'),
@@ -65,23 +86,23 @@ class _HomePageState extends State<HomePage> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    late var check;
-                    await FirebaseFirestore.instance
-                        .collection('manager')
-                        .where('복지사',
-                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                        .get()
-                        .then((value) {
-                      check = value.docs.length;
-                    });
-                    // print('null : ${nullcheck}');
-                    if (check == 0)
-                      await FirebaseFirestore.instance
-                          .collection('manager')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .set(<String, dynamic>{
-                        '복지사': FirebaseAuth.instance.currentUser!.uid
-                      });
+                    // late var check;
+                    // await FirebaseFirestore.instance
+                    //     .collection('manager')
+                    //     .where('복지사',
+                    //         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    //     .get()
+                    //     .then((value) {
+                    //   check = value.docs.length;
+                    // });
+                    // // print('null : ${nullcheck}');
+                    // if (check == 0)
+                    //   await FirebaseFirestore.instance
+                    //       .collection('manager')
+                    //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                    //       .set(<String, dynamic>{
+                    //     '복지사': FirebaseAuth.instance.currentUser!.uid
+                    //   });
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -94,23 +115,23 @@ class _HomePageState extends State<HomePage> {
               ),
               ElevatedButton(
                   onPressed: () async {
-                    late var check;
-                    await FirebaseFirestore.instance
-                        .collection('manager')
-                        .where('복지사',
-                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                        .get()
-                        .then((value) {
-                      check = value.docs.length;
-                    });
-                    // print('null : ${nullcheck}');
-                    if (check == 0)
-                      await FirebaseFirestore.instance
-                          .collection('manager')
-                          .doc(FirebaseAuth.instance.currentUser!.uid)
-                          .set(<String, dynamic>{
-                        '복지사': FirebaseAuth.instance.currentUser!.uid
-                      });
+                    // late var check;
+                    // await FirebaseFirestore.instance
+                    //     .collection('manager')
+                    //     .where('복지사',
+                    //         isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    //     .get()
+                    //     .then((value) {
+                    //   check = value.docs.length;
+                    // });
+                    // // print('null : ${nullcheck}');
+                    // if (check == 0)
+                    //   await FirebaseFirestore.instance
+                    //       .collection('manager')
+                    //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                    //       .set(<String, dynamic>{
+                    //     '복지사': FirebaseAuth.instance.currentUser!.uid
+                    //   });
                     Navigator.push(
                       context,
                       MaterialPageRoute(
