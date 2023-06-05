@@ -33,17 +33,15 @@ class MyApp extends StatelessWidget {
         colorScheme: lightColorScheme,
         fontFamily: GoogleFonts.nanumGothic().fontFamily,
         textTheme: TextTheme(
-            titleLarge: const TextStyle(
-              color: Colors.white,
-              fontSize: 30.0,
-            ),
-            titleMedium: TextStyle(
-              fontFamily: GoogleFonts.eastSeaDokdo().fontFamily,
-              fontSize: 36.0,
-            ),
-            bodyLarge: const TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
+          titleLarge: const TextStyle(
+            color: Colors.white,
+            fontSize: 30.0,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: GoogleFonts.eastSeaDokdo().fontFamily,
+            fontSize: 36.0,
+          ),
+        ),
       ),
       home: const StartPage(),
     );

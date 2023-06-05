@@ -164,8 +164,10 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 if (snapshot.data!.size == 0) {
-                  return const Center(
-                    child: Text('등록된 강사가 없습니다'),
+                  return const Expanded(
+                    child: Center(
+                      child: Text('등록된 강사가 없습니다'),
+                    ),
                   );
                 }
                 // print('here');

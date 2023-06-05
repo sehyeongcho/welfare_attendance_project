@@ -158,9 +158,12 @@ class ProfilePage extends StatelessWidget {
         const SizedBox(height: 12.0),
         Text(
           name,
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        const SizedBox(height: 12.0),
+        const SizedBox(height: 4.0),
         Text(
           emailAddress,
           style: Theme.of(context).textTheme.bodyMedium,

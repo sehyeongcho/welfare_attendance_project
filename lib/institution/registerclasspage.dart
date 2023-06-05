@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:welfare_attendance_project/app_state.dart';
@@ -103,11 +104,26 @@ class _RegisterClassPageState extends State<RegisterClassPage> {
                 '2. 생성한 엑셀 파일에서 아래의 이메일 주소를 편집자로 공유해 주세요\n(※ [공유] 클릭 - [사용자 및 그룹 추가] 칸에 아래의 이메일 주소 입력 - [전송] 클릭)',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const Text(
-                'attendancesheet@welfare-attendance-388218.iam.gserviceaccount.com',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'attendancesheet@welfare-attendance-388218.iam.gserviceaccount.com',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Clipboard.setData(const ClipboardData(
+                          text:
+                              'attendancesheet@welfare-attendance-388218.iam.gserviceaccount.com'));
+                    },
+                    child: const Text('복사'),
+                  ),
+                ],
               ),
               const SizedBox(height: 12.0),
               Text(

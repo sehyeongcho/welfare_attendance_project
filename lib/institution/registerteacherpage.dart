@@ -259,24 +259,27 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                                   child: Text('강사의 QR 코드를 인증해 주세요'))
                               : const Expanded(child: Text('인증되었습니다')),
                           const SizedBox(width: 12.0),
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QRScanner(
-                                          getQrcode: get_qrcode,
-                                        )),
-                              );
-                            },
-                            child: const Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.qr_code_2),
-                                  SizedBox(width: 4.0),
-                                  Text('인증'),
-                                ],
+                          SizedBox(
+                            width: 120.0,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => QRScanner(
+                                            getQrcode: get_qrcode,
+                                          )),
+                                );
+                              },
+                              child: const Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.qr_code_2),
+                                    SizedBox(width: 4.0),
+                                    Text('인증'),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
