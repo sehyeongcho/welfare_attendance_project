@@ -194,12 +194,13 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Expanded(
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
-                                          flex:2,
+                                          flex: 2,
                                           child: Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 8.0, 12.0, 8.0, 0.0),
@@ -231,7 +232,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Expanded(
-                                          flex:1,
+                                          flex: 1,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,

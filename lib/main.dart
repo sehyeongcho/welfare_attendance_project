@@ -40,6 +40,9 @@ class MyApp extends StatelessWidget {
             titleMedium: TextStyle(
               fontFamily: GoogleFonts.eastSeaDokdo().fontFamily,
               fontSize: 36.0,
+            ),
+            bodyLarge: const TextStyle(
+              fontWeight: FontWeight.bold,
             )),
       ),
       home: const StartPage(),

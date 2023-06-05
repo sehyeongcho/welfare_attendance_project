@@ -13,6 +13,8 @@ class ProfilePage extends StatelessWidget {
   late var emailAddress;
   late var profilePhoto;
   var login_method = false; // true -> goolge , false -> anonymous
+  var coverHeight = 280.0 - 56.0;
+  var profileHeight = 96.0;
 
   void get_userdata() {
     final user = FirebaseAuth.instance.currentUser;
@@ -41,6 +43,24 @@ class ProfilePage extends StatelessWidget {
     }
   }
 
+  Widget buildCoverImage() {
+    return Image.asset(
+      'assets/forest.jpg',
+      width: double.infinity,
+      height: coverHeight,
+      fit: BoxFit.cover,
+    );
+  }
+
+  Widget buildProfileImage() {
+    return CircleAvatar(
+      radius: profileHeight / 2,
+      backgroundImage: NetworkImage(
+        profilePhoto,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,48 +84,97 @@ class ProfilePage extends StatelessWidget {
           )
         ],
       ),
+      // body: ListView(
+      //   padding: const EdgeInsets.all(24.0),
+      //   shrinkWrap: true,
+      //   children: [
+      //     SizedBox(
+      //       width: 200.0,
+      //       height: 200.0,
+      //       child: AspectRatio(
+      //         aspectRatio: 1 / 1,
+      //         child: Image.network(profilePhoto),
+      //       ),
+      //     ),
+      //     const SizedBox(height: 12.0),
+      //     Text(
+      //       '<$uid>',
+      //       style: Theme.of(context).textTheme.bodyLarge,
+      //     ),
+      //     const SizedBox(height: 12.0),
+      //     const Divider(
+      //       thickness: 2.0,
+      //     ),
+      //     const SizedBox(height: 12.0),
+      //     Text(
+      //       emailAddress,
+      //       style: Theme.of(context).textTheme.bodyLarge,
+      //     ),
+      //     const SizedBox(height: 12.0),
+      //     Text(
+      //       name,
+      //       style: Theme.of(context).textTheme.bodyLarge,
+      //     ),
+      //     const SizedBox(height: 12.0),
+      //     Center(
+      //       child: QrImageView(
+      //         data: FirebaseAuth.instance.currentUser!.uid,
+      //         version: QrVersions.auto,
+      //         size: 200,
+      //         gapless: false,
+      //       ),
+      //     )
+      //   ],
+      // ),
       body: ListView(
-        padding: const EdgeInsets.all(24.0),
-        shrinkWrap: true,
         children: [
-          SizedBox(
-            width: 200.0,
-            height: 200.0,
-            child: AspectRatio(
-              aspectRatio: 1 / 1,
-              child: Image.network(profilePhoto),
-            ),
-          ),
-          const SizedBox(height: 12.0),
-          Text(
-            '<$uid>',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 12.0),
-          const Divider(
-            thickness: 2.0,
-          ),
-          const SizedBox(height: 12.0),
-          Text(
-            emailAddress,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 12.0),
-          Text(
-            name,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const SizedBox(height: 12.0),
-          Center(
-            child: QrImageView(
-              data: FirebaseAuth.instance.currentUser!.uid,
-              version: QrVersions.auto,
-              size: 200,
-              gapless: false,
-            ),
-          )
+          buildTop(),
+          buildContent(context),
         ],
       ),
+    );
+  }
+
+  Widget buildTop() {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: profileHeight / 2),
+          child: buildCoverImage(),
+        ),
+        Positioned(
+          top: coverHeight - profileHeight / 2,
+          child: buildProfileImage(),
+        ),
+      ],
+    );
+  }
+
+  Widget buildContent(context) {
+    return Column(
+      children: [
+        const SizedBox(height: 12.0),
+        Text(
+          name,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 12.0),
+        Text(
+          emailAddress,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 12.0),
+        Center(
+          child: QrImageView(
+            data: FirebaseAuth.instance.currentUser!.uid,
+            version: QrVersions.auto,
+            size: 200,
+            gapless: false,
+          ),
+        ),
+      ],
     );
   }
 }
