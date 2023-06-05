@@ -26,7 +26,6 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
 
   final _phonenumberController = TextEditingController();
 
-  final _classController = TextEditingController();
   String dropdownValue = '';
   String qrcode = '';
 
@@ -80,6 +79,13 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                             // height: 50.0,
                             child: ElevatedButton(
                                 onPressed: () async {
+                                  if (_maplist.keys.length == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                '새로운 강사에게 할당 가능한 강의가 없습니다')));
+                                    return;
+                                  }
                                   if (qrcode == '') {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
@@ -154,7 +160,7 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                               onPressed: () {
                                 _nameController.clear();
                                 _phonenumberController.clear();
-                                _classController.clear();
+                                _calenderController.clear();
                               },
                             ),
                           ),
@@ -216,20 +222,7 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                           labelText: '전화번호',
                         ),
                       ),
-                      const SizedBox(height: 12.0),
-                      TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '강의를 선택해주세요';
-                          }
-                          return null;
-                        },
-                        controller: _classController,
-                        decoration: const InputDecoration(
-                          // filled: true,
-                          labelText: '강의',
-                        ),
-                      ),
+
                       const SizedBox(height: 12.0),
                       _maplist.keys.length > 0
                           ? DropdownButton<String>(

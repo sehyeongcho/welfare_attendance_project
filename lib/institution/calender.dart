@@ -68,21 +68,18 @@ class _CalenderState extends State<Calender> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100.0,
-      child: ElevatedButton(
-        onPressed: () {
-          _restorableDatePickerRouteFuture.present();
-        },
-        child: const Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.calendar_month),
-              SizedBox(width: 4.0),
-              Text('달력'),
-            ],
-          ),
+    return ElevatedButton(
+      onPressed: () {
+        _restorableDatePickerRouteFuture.present();
+      },
+      child: const Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.calendar_month),
+            SizedBox(width: 4.0),
+            Text('달력'),
+          ],
         ),
       ),
     );

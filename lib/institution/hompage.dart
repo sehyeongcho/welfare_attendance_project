@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
     }
     return WillPopScope(
       onWillPop: () {
-        return Future(() => false);
+        return Future(() => false); // prevent stop back button in phone
       },
       child: Scaffold(
         appBar: AppBar(
@@ -178,78 +178,84 @@ class _HomePageState extends State<HomePage> {
                         .map((DocumentSnapshot document) {
                           Map<String, dynamic> data =
                               document.data()! as Map<String, dynamic>;
-                          return Card(
-                            clipBehavior: Clip.antiAlias,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                AspectRatio(
-                                  aspectRatio: 1 / 1,
-                                  child: Lottie.network(
-                                    'https://assets2.lottiefiles.com/packages/lf20_h9rxcjpi.json',
-                                    fit: BoxFit.fitWidth,
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 0),
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  AspectRatio(
+                                    aspectRatio: 1 / 1,
+                                    child: Lottie.network(
+                                      'https://assets2.lottiefiles.com/packages/lf20_h9rxcjpi.json',
+                                      fit: BoxFit.fitWidth,
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              8.0, 12.0, 8.0, 0.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          flex:2,
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                8.0, 12.0, 8.0, 0.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  data['name'],
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge,
+                                                  maxLines: 1,
+                                                ),
+                                                Text(
+                                                  data['phonenumber'],
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                                Text(
+                                                  data['birthday'],
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex:1,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: <Widget>[
-                                              Text(
-                                                data['name'],
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge,
-                                                maxLines: 1,
+                                              TextButton(
+                                                child: const Text('상세보기'),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            const DetailPage()),
+                                                  );
+                                                },
                                               ),
-                                              const SizedBox(height: 8.0),
-                                              Text(
-                                                data['phonenumber'],
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium,
-                                              ),
-                                              Text(
-                                                data['birthday'],
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium,
-                                              ),
+                                              const SizedBox(width: 8),
                                             ],
                                           ),
                                         ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: <Widget>[
-                                          TextButton(
-                                            child: const Text('상세보기'),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const DetailPage()),
-                                              );
-                                            },
-                                          ),
-                                          const SizedBox(width: 8),
-                                        ],
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         })
