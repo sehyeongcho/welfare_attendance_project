@@ -55,8 +55,12 @@ class ProfilePage extends StatelessWidget {
   Widget buildProfileImage() {
     return CircleAvatar(
       radius: profileHeight / 2,
-      backgroundImage: NetworkImage(
-        profilePhoto,
+      backgroundColor: Colors.grey.shade100,
+      child: CircleAvatar(
+        radius: profileHeight / 2 - 4,
+        backgroundImage: NetworkImage(
+          profilePhoto,
+        ),
       ),
     );
   }
