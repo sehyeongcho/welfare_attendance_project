@@ -17,7 +17,6 @@ class ClassDate extends StatefulWidget {
 }
 
 class _ClassDateState extends State<ClassDate> {
-
   bool downcheck = false;
 
   @override
@@ -30,15 +29,20 @@ class _ClassDateState extends State<ClassDate> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('강의 날짜'),
+        centerTitle: true,
+        title: Text(
+          '강의날짜',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       body: appState.attendancedata == null
           ? Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                Text(widget.classname),
-                const SizedBox(
-                  height: 10,
+                const SizedBox(height: 12.0),
+                Text(
+                  widget.classname,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 appState.datelist.length != 0
                     ? Expanded(
@@ -52,7 +56,12 @@ class _ClassDateState extends State<ClassDate> {
                                   onTap: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => ClassAttendance(classname: widget.classname,date: element,sheetid: widget.sheetid,)),
+                                      MaterialPageRoute(
+                                          builder: (context) => ClassAttendance(
+                                                classname: widget.classname,
+                                                date: element,
+                                                sheetid: widget.sheetid,
+                                              )),
                                     );
                                   },
                                   child: Card(
@@ -64,7 +73,7 @@ class _ClassDateState extends State<ClassDate> {
                                         AspectRatio(
                                           aspectRatio: 1 / 1,
                                           child: Lottie.network(
-                                            'https://assets2.lottiefiles.com/packages/lf20_h9rxcjpi.json',
+                                            'https://assets5.lottiefiles.com/packages/lf20_uMjybUoeGN.json',
                                             fit: BoxFit.fitWidth,
                                           ),
                                         ),
@@ -81,8 +90,7 @@ class _ClassDateState extends State<ClassDate> {
                                                         8.0, 12.0, 8.0, 0.0),
                                                 child: Column(
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .start,
+                                                      CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
                                                       element,
@@ -94,7 +102,6 @@ class _ClassDateState extends State<ClassDate> {
                                                   ],
                                                 ),
                                               ),
-
                                             ],
                                           ),
                                         ),

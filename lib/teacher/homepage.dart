@@ -20,13 +20,11 @@ class _HomePageState extends State<HomePage> {
   late var sheetid;
   late var classname;
 
-  final Stream<
-      DocumentSnapshot<Map<String, dynamic>>> _classstream = FirebaseFirestore
-      .instance
-      .collection('teachers')
-      .doc(FirebaseAuth.instance.currentUser!.uid)
-      .snapshots();
-
+  final Stream<DocumentSnapshot<Map<String, dynamic>>> _classstream =
+      FirebaseFirestore.instance
+          .collection('teachers')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +37,7 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Text(
             '강의목록',
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleMedium,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           leading: IconButton(
             icon: const Icon(
@@ -59,11 +54,11 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Column(
           children: [
-            StreamBuilder <DocumentSnapshot<Map<String, dynamic>>>(
+            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               stream: _classstream,
-              builder:
-                  (BuildContext context, AsyncSnapshot<
-                  DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                      snapshot) {
                 if (snapshot.hasError) {
                   return const Text('Something went wrong');
                 }
@@ -76,17 +71,16 @@ class _HomePageState extends State<HomePage> {
 
                 if (!snapshot.data!.exists)
                   return Center(
-                      child: Text('등록된 강의가 없습니다'),
-
-                      );
+                    child: Text('등록된 강의가 없습니다'),
+                  );
 
                 Map<String, dynamic> data =
-                snapshot.data!.data()! as Map<String, dynamic>;
+                    snapshot.data!.data()! as Map<String, dynamic>;
 
                 data.remove('teacheruid');
                 data.forEach((key, value) {
-                    sheetid = value;
-                    classname = key;
+                  sheetid = value;
+                  classname = key;
                 });
                 var classlist = data.keys.toList();
                 return Expanded(
@@ -96,71 +90,67 @@ class _HomePageState extends State<HomePage> {
                     childAspectRatio: 5.0 / 2.0,
                     children: classlist
                         .map((element) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                                ClassDate(classname: classname,sheetid: sheetid,)),
-                          );
-                        },
-                        child: Card(
-                          clipBehavior: Clip.antiAlias,
-                          child: Row(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: <Widget>[
-                              AspectRatio(
-                                aspectRatio: 1 / 1,
-                                child: Lottie.network(
-                                  'https://assets2.lottiefiles.com/packages/lf20_h9rxcjpi.json',
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                      const EdgeInsets.fromLTRB(
-                                          8.0, 12.0, 8.0, 0.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment
-                                            .start,
-                                        children: <Widget>[
-                                          Text(
-                                            element,
-                                            style: Theme
-                                                .of(context)
-                                                .textTheme
-                                                .bodyLarge,
-                                            maxLines: 1,
-                                          ),
-                                        ],
-                                      ),
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ClassDate(
+                                          classname: classname,
+                                          sheetid: sheetid,
+                                        )),
+                              );
+                            },
+                            child: Card(
+                              clipBehavior: Clip.antiAlias,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  AspectRatio(
+                                    aspectRatio: 1 / 1,
+                                    child: Lottie.network(
+                                      'https://assets3.lottiefiles.com/packages/lf20_yjrdpceb.json',
+                                      fit: BoxFit.fitWidth,
                                     ),
-
-                                  ],
-                                ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              8.0, 12.0, 8.0, 0.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                element,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                                maxLines: 1,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    })
+                            ),
+                          );
+                        })
                         .toList()
                         .cast(),
-                  )
-                  ,
+                  ),
                 );
               },
             ),
-
           ],
         ),
       ),
