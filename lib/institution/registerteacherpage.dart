@@ -136,7 +136,7 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                                           _calenderController.text.trim(),
                                       'phonenumber':
                                           _phonenumberController.text.trim(),
-                                      dropdownValue : sheetid
+                                      dropdownValue: sheetid
                                     });
 
                                     await FirebaseFirestore.instance
@@ -189,14 +189,14 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return '날짜를 선택해주세요';
+                                  return '생년월일을 선택해주세요';
                                 }
                                 return null;
                               },
                               controller: _calenderController,
                               decoration: const InputDecoration(
                                 // filled: true,
-                                labelText: '날짜',
+                                labelText: '생년월일',
                               ),
                             ),
                           ),

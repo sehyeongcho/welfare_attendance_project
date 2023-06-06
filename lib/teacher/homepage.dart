@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:welfare_attendance_project/profilepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:welfare_attendance_project/teacher/classdate.dart';
@@ -17,6 +18,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late TutorialCoachMark tutorialCoachMark;
+  GlobalKey keyButton1 = GlobalKey();
+
+  @override
+  void initState() {
+    createTutorial();
+    Future.delayed(Duration.zero, showTutorial);
+    super.initState();
+  }
+
   late var sheetid;
   late var classname;
 
@@ -40,6 +51,7 @@ class _HomePageState extends State<HomePage> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           leading: IconButton(
+            key: keyButton1,
             icon: const Icon(
               Icons.person,
               semanticLabel: 'profile',
@@ -51,6 +63,17 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.info_outline,
+                semanticLabel: 'guide',
+              ),
+              onPressed: () {
+                showTutorial();
+              },
+            )
+          ],
         ),
         body: Column(
           children: [
@@ -69,10 +92,13 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
-                if (!snapshot.data!.exists)
-                  return Center(
-                    child: Text('등록된 강의가 없습니다'),
+                if (!snapshot.data!.exists) {
+                  return const Expanded(
+                    child: Center(
+                      child: Text('등록된 강의가 없습니다'),
+                    ),
                   );
+                }
 
                 Map<String, dynamic> data =
                     snapshot.data!.data()! as Map<String, dynamic>;
@@ -155,6 +181,77 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void showTutorial() {
+    tutorialCoachMark.show(context: context);
+  }
+
+  void createTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: Colors.red,
+      textSkip: "SKIP",
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "keyButton1",
+        keyTarget: keyButton1,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  const SizedBox(height: 12.0),
+                  Text(
+                    "프로필",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "강사님의 프로필을 확인할 수 있습니다.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
   }
 
   // List<Widget> cardtolist(ThemeData theme) {

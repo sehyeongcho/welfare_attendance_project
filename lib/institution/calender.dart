@@ -38,7 +38,7 @@ class _CalenderState extends State<Calender> with RestorationMixin {
           restorationId: 'date_picker_dialog',
           initialEntryMode: DatePickerEntryMode.calendarOnly,
           initialDate: DateTime.fromMillisecondsSinceEpoch(arguments! as int),
-          firstDate: DateTime(2022),
+          firstDate: DateTime(1950),
           lastDate: DateTime(2024),
         );
       },

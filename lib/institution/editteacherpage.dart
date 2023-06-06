@@ -16,8 +16,7 @@ class EditTeacherPage extends StatefulWidget {
       required this.birthday,
       required this.phonenum,
       required this.sheetid,
-        required this.teacheruid
-      })
+      required this.teacheruid})
       : super(key: key);
 
   final name;
@@ -140,7 +139,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                     await FirebaseFirestore.instance
                                         .collection('manager')
                                         .doc(FirebaseAuth
-                                        .instance.currentUser!.uid)
+                                            .instance.currentUser!.uid)
                                         .update(<String, dynamic>{
                                       widget.classname: [false, widget.sheetid],
                                     });
@@ -210,14 +209,14 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return '날짜를 선택해주세요';
+                                  return '생년월일을 선택해주세요';
                                 }
                                 return null;
                               },
                               controller: _calenderController,
                               decoration: const InputDecoration(
                                 // filled: true,
-                                labelText: '날짜',
+                                labelText: '생년월일',
                               ),
                             ),
                           ),
@@ -287,7 +286,6 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                             )
                           : const Text('모든 강의가 할당됐거나 등록된 강의가 없습니다'),
                       const SizedBox(height: 12.0),
-
                     ],
                   ),
                 ),

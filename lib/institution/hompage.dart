@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'detailpage.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -21,6 +22,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late TutorialCoachMark tutorialCoachMark;
+  GlobalKey keyButton1 = GlobalKey();
+  GlobalKey keyButton2 = GlobalKey();
+  GlobalKey keyButton3 = GlobalKey();
+
+  @override
+  void initState() {
+    createTutorial();
+    Future.delayed(Duration.zero, showTutorial);
+    super.initState();
+  }
+
   late var appState;
   final Stream<QuerySnapshot> _teacherstream = FirebaseFirestore.instance
       .collection('manager')
@@ -75,6 +88,7 @@ class _HomePageState extends State<HomePage> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           leading: IconButton(
+            key: keyButton1,
             icon: const Icon(
               Icons.person,
               semanticLabel: 'profile',
@@ -86,6 +100,17 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.info_outline,
+                semanticLabel: 'guide',
+              ),
+              onPressed: () {
+                showTutorial();
+              },
+            )
+          ],
         ),
         body: Column(
           children: [
@@ -94,6 +119,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const SizedBox(width: 24.0),
                 ElevatedButton(
+                    key: keyButton2,
                     onPressed: () async {
                       // late var check;
                       // await FirebaseFirestore.instance
@@ -121,6 +147,7 @@ class _HomePageState extends State<HomePage> {
                     child: const Text('강의등록')),
                 const SizedBox(width: 24.0),
                 ElevatedButton(
+                    key: keyButton3,
                     onPressed: () async {
                       // late var check;
                       // await FirebaseFirestore.instance
@@ -218,7 +245,11 @@ class _HomePageState extends State<HomePage> {
                                                   maxLines: 1,
                                                 ),
                                                 Text(
-                                                  data['phonenumber'],
+                                                  data['phonenumber'].replaceAllMapped(
+                                                      RegExp(
+                                                          r'(\d{3})(\d{3,4})(\d{4})'),
+                                                      (m) =>
+                                                          '${m[1]}-${m[2]}-${m[3]}'),
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodyMedium,
@@ -246,7 +277,10 @@ class _HomePageState extends State<HomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                               DetailPage(teacheruid: data['teacheruid'],)),
+                                                            DetailPage(
+                                                              teacheruid: data[
+                                                                  'teacheruid'],
+                                                            )),
                                                   );
                                                 },
                                               ),
@@ -272,5 +306,146 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void showTutorial() {
+    tutorialCoachMark.show(context: context);
+  }
+
+  void createTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: _createTargets(),
+      colorShadow: Colors.red,
+      textSkip: "SKIP",
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
+  List<TargetFocus> _createTargets() {
+    List<TargetFocus> targets = [];
+    targets.add(
+      TargetFocus(
+        identify: "keyButton1",
+        keyTarget: keyButton1,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  const SizedBox(height: 12.0),
+                  Text(
+                    "프로필",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "복지사님의 프로필을 확인할 수 있습니다.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+    targets.add(
+      TargetFocus(
+        identify: "keyButton2",
+        keyTarget: keyButton2,
+        color: Colors.green,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  const SizedBox(height: 48.0),
+                  Text(
+                    "강의등록",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "복지시설에서 운영 중인 강의를 등록할 수 있습니다. 강사님을 등록하기 위해서는 반드시 먼저 강의를 등록해야 합니다.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+    targets.add(
+      TargetFocus(
+        identify: "keyButton3",
+        keyTarget: keyButton3,
+        color: Colors.blue,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const <Widget>[
+                  const SizedBox(height: 48.0),
+                  Text(
+                    "강사등록",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "복지시설에서 강의 중인 강사님을 등록할 수 있습니다. 강사님을 등록하기 위해서는 반드시 먼저 강의를 등록해야 합니다.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+
+    return targets;
   }
 }
