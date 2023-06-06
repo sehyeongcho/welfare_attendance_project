@@ -134,10 +134,19 @@ class _DetailPageState extends State<DetailPage> {
                   .doc(widget.teacheruid)
                   .delete();
 
+              await FirebaseFirestore.instance
+                  .collection('manager')
+                  .doc(FirebaseAuth
+                  .instance.currentUser!.uid)
+                  .update(<String, dynamic>{
+                classname: [false, sheetid],
+              });
+
               FirebaseFirestore.instance
                   .collection('teachers')
                   .doc(widget.teacheruid)
                   .delete();
+              Navigator.pop(context);
 
             },
           ),
