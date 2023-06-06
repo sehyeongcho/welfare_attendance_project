@@ -128,13 +128,15 @@ class _RegisterTeacherPageState extends State<RegisterTeacherPage> {
                                         .doc(FirebaseAuth
                                             .instance.currentUser!.uid)
                                         .collection('teacher')
-                                        .add(<String, dynamic>{
+                                        .doc(qrcode)
+                                        .set(<String, dynamic>{
                                       'teacheruid': qrcode,
                                       'name': _nameController.text.trim(),
                                       'birthday':
                                           _calenderController.text.trim(),
                                       'phonenumber':
                                           _phonenumberController.text.trim(),
+                                      dropdownValue : sheetid
                                     });
 
                                     await FirebaseFirestore.instance
