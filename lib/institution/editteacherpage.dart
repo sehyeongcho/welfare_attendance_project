@@ -9,7 +9,23 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class EditTeacherPage extends StatefulWidget {
-  EditTeacherPage({Key? key}) : super(key: key);
+  EditTeacherPage(
+      {Key? key,
+      required this.name,
+      required this.classname,
+      required this.birthday,
+      required this.phonenum,
+      required this.sheetid,
+        required this.teacheruid
+      })
+      : super(key: key);
+
+  final name;
+  final classname;
+  final birthday;
+  final phonenum;
+  final sheetid;
+  final teacheruid;
 
   @override
   State<EditTeacherPage> createState() => _EditTeacherPageState();
@@ -20,21 +36,26 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final _nameController = TextEditingController();
+  var _nameController = null;
 
-  var _calenderController = TextEditingController();
+  var _calenderController = null;
 
-  final _phonenumberController = TextEditingController();
+  var _phonenumberController = null;
 
-  final _classController = TextEditingController();
-  String dropdownValue = '';
-  String qrcode = '';
+  var _classnameController = null;
 
-  void get_qrcode(String? code) {
-    setState(() {
-      this.qrcode = code!;
-    });
+  void setTextController() {
+    if (_nameController == null)
+      _nameController = TextEditingController(text: widget.name);
+    if (_calenderController == null)
+      _calenderController = TextEditingController(text: widget.birthday);
+    if (_phonenumberController == null)
+      _phonenumberController = TextEditingController(text: widget.phonenum);
+    if (_classnameController == null)
+      _classnameController = TextEditingController(text: widget.classname);
   }
+
+  String dropdownValue = '';
 
   void select_canlender(String calendar) {
     setState(() {
@@ -44,6 +65,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
 
   @override
   Widget build(BuildContext context) {
+    setTextController();
     var appState = context.watch<ApplicationState>();
     _maplist = appState.maplist!;
     if (dropdownValue == '')
@@ -80,41 +102,47 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                             // height: 50.0,
                             child: ElevatedButton(
                                 onPressed: () async {
-                                  if (qrcode == '') {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                '등록할 강사의 QR 코드를 인증해 주세요')));
-                                    return;
-                                  }
-
+                                  // if (_maplist.keys.length == 0) {
+                                  //   ScaffoldMessenger.of(context).showSnackBar(
+                                  //       SnackBar(
+                                  //           content: Text(
+                                  //               '새로운 강사에게 할당 가능한 강의가 없습니다')));
+                                  //   return;
+                                  // }
                                   if (_formKey.currentState!.validate()) {
-                                    late var check;
-                                    await FirebaseFirestore.instance
-                                        .collection('teachers')
-                                        .where('teacheruid', isEqualTo: qrcode)
-                                        .get()
-                                        .then((value) {
-                                      check = value.docs.length;
-                                    });
-                                    // print('null : ${nullcheck}');
-                                    if (check > 0) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                              content: Text('이미 등록된 강사입니다')));
-                                      return;
-                                    }
-                                    late final sheetid;
-                                    _maplist.forEach((key, value) {
-                                      if (key == dropdownValue)
-                                        sheetid = value[1];
-                                    });
+                                    // late var check;
+                                    // await FirebaseFirestore.instance
+                                    //     .collection('teachers')
+                                    //     .where('teacheruid', isEqualTo: )
+                                    //     .get()
+                                    //     .then((value) {
+                                    //   check = value.docs.length;
+                                    // });
+                                    // // print('null : ${nullcheck}');
+                                    // if (check > 0) {
+                                    //   ScaffoldMessenger.of(context)
+                                    //       .showSnackBar(const SnackBar(
+                                    //           content: Text('이미 등록된 강사입니다')));
+                                    //   return;
+                                    // }
+                                    // late final sheetid;
+                                    // _maplist.forEach((key, value) {
+                                    //   if (key == dropdownValue)
+                                    //     sheetid = value[1];
+                                    // });
+                                    // await FirebaseFirestore.instance
+                                    //     .collection('manager')
+                                    //     .doc(FirebaseAuth
+                                    //         .instance.currentUser!.uid)
+                                    //     .update(<String, dynamic>{
+                                    //   dropdownValue: [true, sheetid],
+                                    // });
                                     await FirebaseFirestore.instance
                                         .collection('manager')
                                         .doc(FirebaseAuth
-                                            .instance.currentUser!.uid)
+                                        .instance.currentUser!.uid)
                                         .update(<String, dynamic>{
-                                      dropdownValue: [true, sheetid],
+                                      widget.classname: [false, widget.sheetid],
                                     });
 
                                     await FirebaseFirestore.instance
@@ -122,8 +150,9 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                         .doc(FirebaseAuth
                                             .instance.currentUser!.uid)
                                         .collection('teacher')
-                                        .add(<String, dynamic>{
-                                      'teacheruid': qrcode,
+                                        .doc(widget.teacheruid)
+                                        .update(<String, dynamic>{
+                                      // 'teacheruid': qrcode,
                                       'name': _nameController.text.trim(),
                                       'birthday':
                                           _calenderController.text.trim(),
@@ -131,13 +160,13 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                           _phonenumberController.text.trim(),
                                     });
 
-                                    await FirebaseFirestore.instance
-                                        .collection('teachers')
-                                        .doc(qrcode)
-                                      ..set(<String, dynamic>{
-                                        'teacheruid': qrcode,
-                                        dropdownValue: sheetid
-                                      });
+                                    // await FirebaseFirestore.instance
+                                    //     .collection('teachers')
+                                    //     .doc(qrcode).
+                                    //   .set(<String, dynamic>{
+                                    //     'teacheruid': qrcode,
+                                    //     dropdownValue: sheetid
+                                    //   });
                                     Navigator.of(context).pop();
                                   }
                                 },
@@ -154,7 +183,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                               onPressed: () {
                                 _nameController.clear();
                                 _phonenumberController.clear();
-                                _classController.clear();
+                                _classnameController.clear();
                               },
                             ),
                           ),
@@ -224,7 +253,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                           }
                           return null;
                         },
-                        controller: _classController,
+                        controller: _classnameController,
                         decoration: const InputDecoration(
                           // filled: true,
                           labelText: '강의',
@@ -258,40 +287,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                             )
                           : const Text('모든 강의가 할당됐거나 등록된 강의가 없습니다'),
                       const SizedBox(height: 12.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          qrcode == ''
-                              ? const Expanded(
-                                  child: Text('강사의 QR 코드를 인증해 주세요'))
-                              : const Expanded(child: Text('인증되었습니다')),
-                          const SizedBox(width: 12.0),
-                          SizedBox(
-                            width: 120.0,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => QRScanner(
-                                            getQrcode: get_qrcode,
-                                          )),
-                                );
-                              },
-                              child: const Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.qr_code_2),
-                                    SizedBox(width: 4.0),
-                                    Text('인증'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+
                     ],
                   ),
                 ),

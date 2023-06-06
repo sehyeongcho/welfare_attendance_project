@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   late var classname;
 
   final Stream<
-      DocumentSnapshot<Map<String, dynamic>>> _teacherstream = FirebaseFirestore
+      DocumentSnapshot<Map<String, dynamic>>> _classstream = FirebaseFirestore
       .instance
       .collection('teachers')
       .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           children: [
             StreamBuilder <DocumentSnapshot<Map<String, dynamic>>>(
-              stream: _teacherstream,
+              stream: _classstream,
               builder:
                   (BuildContext context, AsyncSnapshot<
                   DocumentSnapshot<Map<String, dynamic>>> snapshot) {

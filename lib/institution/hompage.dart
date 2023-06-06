@@ -246,7 +246,7 @@ class _HomePageState extends State<HomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            const DetailPage()),
+                                                               DetailPage(teacheruid: data['teacheruid'],)),
                                                   );
                                                 },
                                               ),

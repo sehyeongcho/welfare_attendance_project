@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lottie/lottie.dart';
 import 'editteacherpage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({Key? key /*, required this.data, required this.docId*/})
-      : super(key: key);
+  DetailPage({Key? key, required this.teacheruid}) : super(key: key) {
+    teacherstream = FirebaseFirestore.instance
+        .collection('manager')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('teacher')
+        .doc(teacheruid)
+        .snapshots();
+  }
 
-  // final Map<String, dynamic> data;
-  // final String docId;
+  late Stream<DocumentSnapshot<Map<String, dynamic>>> teacherstream;
+
+  final teacheruid;
 
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 
 class _DetailPageState extends State<DetailPage> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<MyAppState>().initFavorite();
-  // }
-
   String convertTime(dynamic time) {
     final timestamp = time;
     final date = DateTime.fromMillisecondsSinceEpoch(
@@ -30,27 +34,15 @@ class _DetailPageState extends State<DetailPage> {
     return date.toString();
   }
 
+  late var name;
+  late var classname;
+  late var phonenumber;
+  late var birthday;
+  late var sheetid;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // create a Floating Action Button
-      // before adding to wishlist: shopping_cart icon
-      // after adding to wishlist: check icon
-      // floatingActionButton: FloatingActionButton(
-      //   child: Consumer<MyAppState>(
-      //     builder: (context, appState, child) {
-      //       return (appState.wishlistState['wishlist'] == null ||
-      //               !appState.wishlistState['wishlist'].contains(widget.docId))
-      //           ? const Icon(Icons.shopping_cart)
-      //           : const Icon(Icons.check);
-      //     },
-      //   ),
-
-      //   // when the floating action button is pressed, the item is added to wishlist
-      //   onPressed: () {
-      //     context.read<MyAppState>().toggleFavorite(widget.docId);
-      //   },
-      // ),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -65,20 +57,18 @@ class _DetailPageState extends State<DetailPage> {
               semanticLabel: 'edit',
             ),
             onPressed: () {
-              // if (FirebaseAuth.instance.currentUser!.uid ==
-              //     widget.data['uid']) {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) =>
-              //         EditPage(data: widget.data, docId: widget.docId),
-              //   ),
-              //   );
-              // }
 
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => EditTeacherPage()),
+                MaterialPageRoute(
+                    builder: (context) => EditTeacherPage(
+                          name: name,
+                          phonenum: phonenumber,
+                      classname: classname,
+                      birthday: birthday,
+                      sheetid: sheetid,
+                      teacheruid: widget.teacheruid,
+                        )),
               );
             },
           ),
@@ -135,13 +125,27 @@ class _DetailPageState extends State<DetailPage> {
               //     ),
               //   );
               // }
+
+              FirebaseFirestore.instance
+                  .collection('manager')
+                  .doc(FirebaseAuth
+                  .instance.currentUser!.uid)
+                  .collection('teacher')
+                  .doc(widget.teacheruid)
+                  .delete();
+
+              FirebaseFirestore.instance
+                  .collection('teachers')
+                  .doc(widget.teacheruid)
+                  .delete();
+
             },
           ),
         ],
       ),
 
       // Detail page should have Product Image, Name, Price and Description
-      body: ListView(
+      body: Column(
         children: [
           // Image
           Lottie.network(
@@ -149,56 +153,84 @@ class _DetailPageState extends State<DetailPage> {
             width: 300.0,
             height: 300.0,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      // Name
-                      child: Text(
-                        '강사 이름',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                  stream: widget.teacherstream,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.hasError) {
+                      return const Text('Something went wrong');
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (!snapshot.data!.exists) {
+                      return const Expanded(
+                        child: Center(
+                          child: Text('등록된 강사가 없습니다'),
                         ),
+                      );
+                    }
+                    Map<String, dynamic> data =
+                        snapshot.data!.data()! as Map<String, dynamic>;
+
+                    data.forEach((key, value) {
+                      if (key == 'name')
+                        name = value;
+                      else if (key == 'birthday')
+                        birthday = value;
+                      else if (key == 'phonenumber')
+                        phonenumber = value;
+                      else if (key != 'teacheruid') {
+                        classname = key;
+                        sheetid = value;
+                      }
+                    });
+
+                    return Padding(
+                      padding: EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                name,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12.0),
+                          // Price
+                          Text(phonenumber),
+                          SizedBox(height: 12.0),
+                          Text(birthday),
+                          SizedBox(height: 12.0),
+                          Divider(
+                            thickness: 2.0,
+                          ),
+                          SizedBox(height: 12.0),
+
+                          // Description
+                          Text(classname),
+                          SizedBox(height: 12.0),
+                        ],
                       ),
-                    ),
-                    // StreamBuilder(
-                    //   stream: db
-                    //       .collection('product')
-                    //       .doc(widget.docId)
-                    //       .snapshots(),
-                    //   builder: (context, snapshot) {
-                    //     return FavoriteWidget(
-                    //         data: widget.data, docId: widget.docId);
-                    //   },
-                    // ),
-                  ],
+                    );
+                  },
                 ),
-                SizedBox(height: 12.0),
-
-                // Price
-                Text('강사 전화번호'),
-                SizedBox(height: 12.0),
-                Text('강사 생년월일'),
-                SizedBox(height: 12.0),
-                Divider(
-                  thickness: 2.0,
-                ),
-                SizedBox(height: 12.0),
-
-                // Description
-                Text('강사 강의목록'),
-                SizedBox(height: 12.0),
-
-                // Show UID & creation time & recent update time (Use FieldValue.serverTimestamp())
-                // Text("Creator: ${widget.data['uid']}"),
-                // Text("${convertTime(widget.data['creationtime'])} Created"),
-                // Text(
-                //     "${convertTime(widget.data['recentupdatetime'])} Modified"),
               ],
             ),
           ),
