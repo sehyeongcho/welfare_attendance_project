@@ -191,9 +191,19 @@ class _HomePageState extends State<HomePage> {
                 }
 
                 if (snapshot.data!.size == 0) {
-                  return const Expanded(
+                  return Expanded(
                     child: Center(
-                      child: Text('등록된 강사가 없습니다'),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.network(
+                            'https://assets8.lottiefiles.com/packages/lf20_dmw3t0vg.json',
+                            width: 240.0,
+                          ),
+                          const SizedBox(height: 12.0),
+                          const Text('등록된 강사가 없습니다'),
+                        ],
+                      ),
                     ),
                   );
                 }

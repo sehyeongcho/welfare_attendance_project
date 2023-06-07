@@ -137,15 +137,6 @@ class _LoginPageState extends State<LoginPage> {
           '로그인',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.info_outline,
-              semanticLabel: 'information',
-            ),
-            onPressed: () {},
-          ),
-        ],
       ),
       body: SafeArea(
         child: ListView(
