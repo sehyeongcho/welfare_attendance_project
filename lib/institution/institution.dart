@@ -13,6 +13,11 @@ class InstitutionApp extends StatelessWidget {
     return  StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User?> user) {
+          if (user.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           if (user.hasData) {
             return HomePage();
           } else {
