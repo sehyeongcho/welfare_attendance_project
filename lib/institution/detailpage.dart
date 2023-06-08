@@ -124,32 +124,53 @@ class _DetailPageState extends State<DetailPage> {
               //   );
               // }
 
-              FirebaseFirestore.instance
-                  .collection('manager')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection('teacher')
-                  .doc(widget.teacheruid)
-                  .delete();
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('강사삭제'),
+                  content: const Text('정말 삭제하시겠습니까?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, '취소'),
+                      child: const Text('취소'),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        FirebaseFirestore.instance
+                            .collection('manager')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('teacher')
+                            .doc(widget.teacheruid)
+                            .delete();
 
-              await FirebaseFirestore.instance
-                  .collection('manager')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .update(<String, dynamic>{
-                classname: [false, sheetid],
-              });
+                        await FirebaseFirestore.instance
+                            .collection('manager')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .update(<String, dynamic>{
+                          classname: [false, sheetid],
+                        });
 
-              FirebaseFirestore.instance
-                  .collection('teachers')
-                  .doc(widget.teacheruid)
-                  .delete();
-              Navigator.pop(context);
+                        FirebaseFirestore.instance
+                            .collection('teachers')
+                            .doc(widget.teacheruid)
+                            .delete();
+
+                        Navigator.pop(context, '확인');
+                        Navigator.pop(context);
+                      },
+                      child: const Text('확인'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],
       ),
 
       // Detail page should have Product Image, Name, Price and Description
-      body: Column(
+      body: ListView(
+        shrinkWrap: true,
         children: [
           // Image
           Lottie.network(

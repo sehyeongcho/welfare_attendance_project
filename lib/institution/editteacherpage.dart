@@ -38,7 +38,6 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
 
   var _phonenumberController = null;
 
-
   void setTextController() {
     if (_nameController == null)
       _nameController = TextEditingController(text: widget.name);
@@ -98,12 +97,11 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                   if (_maplist.keys.length == 0) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
-                                            content: Text(
-                                                '강사에게 할당 가능한 강의가 없습니다')));
+                                            content:
+                                                Text('강사에게 할당 가능한 강의가 없습니다')));
                                     return;
                                   }
                                   if (_formKey.currentState!.validate()) {
-
                                     late final sheetid;
                                     _maplist.forEach((key, value) {
                                       if (key == dropdownValue)
@@ -119,7 +117,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                     await FirebaseFirestore.instance
                                         .collection('manager')
                                         .doc(FirebaseAuth
-                                        .instance.currentUser!.uid)
+                                            .instance.currentUser!.uid)
                                         .update(<String, dynamic>{
                                       dropdownValue: [true, sheetid],
                                     });
@@ -130,7 +128,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                             .instance.currentUser!.uid)
                                         .collection('teacher')
                                         .doc(widget.teacheruid)
-                                        .set( <String, dynamic>{
+                                        .set(<String, dynamic>{
                                       'teacheruid': widget.teacheruid,
                                       'name': _nameController.text.trim(),
                                       'birthday':
@@ -143,10 +141,10 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                                     await FirebaseFirestore.instance
                                         .collection('teachers')
                                         .doc(widget.teacheruid)
-                                      .set(<String, dynamic>{
-                                        'teacheruid':widget.teacheruid,
-                                        dropdownValue: sheetid
-                                      });
+                                        .set(<String, dynamic>{
+                                      'teacheruid': widget.teacheruid,
+                                      dropdownValue: sheetid
+                                    });
                                     Navigator.of(context).pop();
                                   }
                                 },
@@ -226,7 +224,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                         ),
                       ),
                       const SizedBox(height: 12.0),
-                      Text('rlwhsrkdml: '+widget.classname),
+                      Text('기존 강의: ' + widget.classname),
                       const SizedBox(height: 24.0),
                       _maplist.keys.length > 0
                           ? InputDecorator(
