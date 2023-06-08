@@ -116,8 +116,8 @@ class _ClassAttendanceState extends State<ClassAttendance> {
                   ),
                   // SizedBox(width: 20,),
                   data[outindex] == 'o'
-                      ? Icon(Icons.check_circle)
-                      : Icon(Icons.close_rounded)
+                      ? Icon(Icons.check_circle,size: 40,)
+                      : Icon(Icons.close_rounded,size: 40,)
 
                   // Text('${data[2]}')
                 ],

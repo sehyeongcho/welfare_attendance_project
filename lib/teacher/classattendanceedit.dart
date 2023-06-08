@@ -149,19 +149,26 @@ class _ClassAttendacnceEditState extends State<ClassAttendacnceEdit> {
                   ),
                   // SizedBox(width: 20,),
                   InkWell(
-                      onTap: () {
-                        if (data[outindex] == 'o')
-                          setState(() {
-                            data[outindex] = 'x';
-                          });
-                        else
-                          setState(() {
-                            data[outindex] = 'o';
-                          });
-                      },
-                      child: data[outindex] == 'o'
-                          ? Icon(Icons.check_circle)
-                          : Icon(Icons.close_rounded))
+                    onTap: () {
+                      if (data[outindex] == 'o')
+                        setState(() {
+                          data[outindex] = 'x';
+                        });
+                      else
+                        setState(() {
+                          data[outindex] = 'o';
+                        });
+                    },
+                    child: data[outindex] == 'o'
+                        ? Icon(
+                            Icons.check_circle,
+                            size: 40,
+                          )
+                        : Icon(
+                            Icons.close_rounded,
+                            size: 40,
+                          ),
+                  )
 
                   // Text('${data[2]}')
                 ],
