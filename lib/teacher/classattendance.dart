@@ -28,7 +28,11 @@ class _ClassAttendanceState extends State<ClassAttendance> {
     final ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('출석체크'),
+        centerTitle: true,
+        title: Text(
+          '출석결과',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         actions: [
           IconButton(
             icon: const Icon(
@@ -52,15 +56,20 @@ class _ClassAttendanceState extends State<ClassAttendance> {
       ),
       body: Column(
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Text(widget.classname),
-            SizedBox(
-              width: 10,
-            ),
-            Text(widget.date)
-          ]),
-          const SizedBox(
-            height: 10,
+          const SizedBox(height: 12.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.classname,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(width: 12.0),
+              Text(
+                widget.date,
+                style: Theme.of(context).textTheme.bodyLarge,
+              )
+            ],
           ),
           Expanded(
             child: ListView(

@@ -9,6 +9,8 @@ import 'package:welfare_attendance_project/googlecloud_config/configuration.dart
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
+import 'registerclassguide.dart';
+
 class RegisterClassPage extends StatefulWidget {
   RegisterClassPage({Key? key}) : super(key: key);
 
@@ -73,6 +75,21 @@ class _RegisterClassPageState extends State<RegisterClassPage> {
           '강의등록',
           style: Theme.of(context).textTheme.titleMedium,
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.info_outline,
+              semanticLabel: 'guide',
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const RegisterClassGuide()),
+              );
+            },
+          )
+        ],
       ),
       body: ModalProgressHUD(
         inAsyncCall: showspiner,
@@ -87,7 +104,7 @@ class _RegisterClassPageState extends State<RegisterClassPage> {
               // Text(
               //     '꼭 순서대로 따라해주세요!\n1.먼저 구글드라이브에서 출석을 관리하고 싶은 강의의 엑셀파일을 만든다\n 2.만든 엑셀 파일에아래의 이메일주소를 편집자로 공유한다\nattendancesheet@welfare-attendance-388218.iam.gserviceaccount.com  \n 3.엑셀파일과 같은 이름을 아래에 입력한다'),
               const Text(
-                '반드시 아래의 순서대로 진행해 주세요!',
+                '반드시 아래의 순서대로 진행해 주세요!\n(※ 상세 가이드가 필요하신 경우 우상단의 아이콘을 눌러주세요)',
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,

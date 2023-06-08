@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lottie/lottie.dart';
 import 'editteacherpage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
@@ -57,17 +56,16 @@ class _DetailPageState extends State<DetailPage> {
               semanticLabel: 'edit',
             ),
             onPressed: () {
-
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => EditTeacherPage(
                           name: name,
                           phonenum: phonenumber,
-                      classname: classname,
-                      birthday: birthday,
-                      sheetid: sheetid,
-                      teacheruid: widget.teacheruid,
+                          classname: classname,
+                          birthday: birthday,
+                          sheetid: sheetid,
+                          teacheruid: widget.teacheruid,
                         )),
               );
             },
@@ -128,16 +126,14 @@ class _DetailPageState extends State<DetailPage> {
 
               FirebaseFirestore.instance
                   .collection('manager')
-                  .doc(FirebaseAuth
-                  .instance.currentUser!.uid)
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
                   .collection('teacher')
                   .doc(widget.teacheruid)
                   .delete();
 
               await FirebaseFirestore.instance
                   .collection('manager')
-                  .doc(FirebaseAuth
-                  .instance.currentUser!.uid)
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
                   .update(<String, dynamic>{
                 classname: [false, sheetid],
               });
@@ -147,7 +143,6 @@ class _DetailPageState extends State<DetailPage> {
                   .doc(widget.teacheruid)
                   .delete();
               Navigator.pop(context);
-
             },
           ),
         ],
@@ -223,7 +218,9 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                           SizedBox(height: 12.0),
                           // Price
-                          Text(phonenumber),
+                          Text(phonenumber.replaceAllMapped(
+                              RegExp(r'(\d{3})(\d{3,4})(\d{4})'),
+                              (m) => '${m[1]}-${m[2]}-${m[3]}')),
                           SizedBox(height: 12.0),
                           Text(birthday),
                           SizedBox(height: 12.0),
