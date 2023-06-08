@@ -29,14 +29,7 @@ class ApplicationState extends ChangeNotifier {
     _whatuser = value;
   }
 
-  var _exceldata = null;
 
-  get exceldata => _exceldata;
-
-  void getdata(var data) {
-    _exceldata = data;
-    notifyListeners();
-  }
 
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>
       classlist_listener() {
