@@ -45,4 +45,4 @@ app.*.map.json
 
 # googlecloud
 /lib/googlecloud_config/
-/lib/googlecloud_config/configuration.dart
+configuration.dart
