@@ -1,16 +1,5 @@
-# welfare_attendance_project
+# 노인복지시설 복지사 전용 출석체크 앱
 
-A new Flutter project.
+![Welfare Attendance Project](https://github.com/user-attachments/assets/dfc03bfd-39a0-4771-891c-0c7346869ca1)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 발표 영상: <a href="https://youtu.be/KZ20wgCV_EE?si=CtbWeOjUdD1gdO3d" target="_blank">https://youtu.be/KZ20wgCV_EE?si=CtbWeOjUdD1gdO3d</a>
