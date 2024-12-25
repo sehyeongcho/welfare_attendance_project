@@ -1,16 +1,15 @@
-import 'dart:async';
-
+import 'dart:async'; // 비동기 처리를 위한 패키지입니다.
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firebase Firestore를 사용하기 위한 패키지입니다.
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:googleapis/drive/v3.dart' as drive;
-import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:googleapis/drive/v3.dart' as drive; // Google Drive API를 사용하기 위한 패키지입니다.
+import 'package:googleapis_auth/auth_io.dart' as auth; // Google API 인증을 위한 패키지입니다.
 import 'package:welfare_attendance_project/googlecloud_config/configuration.dart';
-import 'package:googleapis/sheets/v4.dart' as sheets;
-import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import 'package:csv/csv.dart';
-import 'dart:io';
+import 'package:googleapis/sheets/v4.dart' as sheets; // Google Sheets API를 사용하기 위한 패키지입니다.
+import 'package:http/http.dart' as http; // HTTP 요청을 위한 패키지입니다.
+import 'package:path_provider/path_provider.dart'; // 로컬 경로를 가져오기 위한 패키지입니다.
+import 'package:csv/csv.dart'; // CSV 파일을 다루기 위한 패키지입니다.
+import 'dart:io'; // 파일 입출력을 위한 패키지입니다.
 
 class ApplicationState extends ChangeNotifier {
   late var _whatuser; //복시사용 로그인 = true
@@ -28,8 +27,6 @@ class ApplicationState extends ChangeNotifier {
   set whatuser(value) {
     _whatuser = value;
   }
-
-
 
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>
       classlist_listener() {
@@ -110,35 +107,4 @@ class ApplicationState extends ChangeNotifier {
       print("Some Error");
     });
   }
-
-  // void stream(var response) {
-  //   List<int> dataStore = [];
-  //   var listener = response.stream.listen((data) {
-  //     print(dataStore);
-  //     dataStore.insertAll(dataStore.length, data);
-  //   }, onDone: () async {
-  //     Directory tempDir =
-  //         await getTemporaryDirectory(); //Get temp folder using Path Provider
-  //     String tempPath = tempDir.path; //Get path to that location
-  //     File file = File('$tempPath/test'); //Create a dummy file
-  //     await file.writeAsBytes(
-  //         dataStore); //Write to that file from the datastore you created from the Media stream
-  //     String content = file.readAsStringSync(); // Read String from the file
-  //     _attendancedata = const CsvToListConverter().convert(content);
-  //     print(_attendancedata); //Finally you have your text
-  //     print("Task Done");
-  //     _datelist = [];
-  //
-  //     if (_attendancedata != null && _attendancedata.lenghth > 0 ) {
-  //       for (var date in _attendancedata[0]) {
-  //         if (date != '이름' && date != '전화번호') {
-  //           _datelist.add(date);
-  //         }
-  //       }
-  //     }
-  //     notifyListeners();
-  //   }, onError: (error) {
-  //     print("Some Error");
-  //   });
-  // }
 }
