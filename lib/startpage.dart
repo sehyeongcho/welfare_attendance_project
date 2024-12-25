@@ -8,8 +8,8 @@ import 'institution/loginpage.dart' as ins;
 import 'teacher/loginpage.dart' as tea;
 import 'app_state.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:video_player/video_player.dart'; // 비디오 재생을 위한 패키지입니다.
+import 'package:animated_text_kit/animated_text_kit.dart'; // 애니메이션 텍스트 표시를 위한 패키지입니다.
 
 class StartPage extends StatefulWidget { // 앱의 시작 화면을 나타냅니다. 상태를 가진 화면을 만들기 위해 StatefulWidget을 사용합니다. (배경 비디오 재생 상태 관리 등)
   const StartPage({Key? key}) : super(key: key);
