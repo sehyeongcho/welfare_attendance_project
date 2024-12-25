@@ -11,12 +11,13 @@ import 'package:path_provider/path_provider.dart'; // 로컬 경로를 가져오
 import 'package:csv/csv.dart'; // CSV 파일을 다루기 위한 패키지입니다.
 import 'dart:io'; // 파일 입출력을 위한 패키지입니다.
 
+// 앱의 상태를 관리하고, 데이터를 업데이트하며 알림을 제공합니다.
+// Flutter의 ChangeNotifier를 상속받아 상태 변화 시 UI에 알립니다.
 class ApplicationState extends ChangeNotifier {
-  late var _whatuser; //복시사용 로그인 = true
+  late var _whatuser; // 복지사 로그인 시 true가 됩니다.
 
-  List<String> _classlist = [];
-  Map<String, dynamic>? _maplist =
-      Map(); // contain bool to check if other teacher take class and excelid
+  List<String> _classlist = []; // 강사가 담당하는 수업 목록입니다.
+  Map<String, dynamic>? _maplist = Map(); // contain bool to check if other teacher take class and excelid
 
   Map<String, dynamic>? get maplist => _maplist;
 
@@ -28,28 +29,28 @@ class ApplicationState extends ChangeNotifier {
     _whatuser = value;
   }
 
-  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>
-      classlist_listener() {
+  // 수업 목록의 변화를 감지하고 업데이트하는 함수입니다.
+  StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> classlist_listener() {
     var listen = FirebaseFirestore.instance
         .collection('manager')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .snapshots()
-        .listen((snapshot) {
-      // _number_like = (snapshot.data() as Map<String, dynamic>).keys.toList().length;
+        .snapshots() // 문서의 실시간 업데이트를 구독합니다.
+        .listen((snapshot) { // Firestore에서 데이터를 가져와서 처리합니다.
       _classlist = snapshot.data()!.keys.toList();
       _classlist.remove('복지사');
       _maplist = snapshot.data();
-      _maplist!.remove('복지사'); //remove 복지사 field
+      _maplist!.remove('복지사');
       List<String> keylist = [];
+
       if (_maplist != null)
         _maplist?.forEach((key, value) {
-          if (value.first == true) //other teacher already took this class
+          if (value.first == true) // 다른 담당자가 이미 등록한 수업이라면, 해당 수업의 키를 keylist에 추가합니다.
             keylist.add(key);
-          // _maplist?.remove(key);
         });
-      for (var key in keylist) _maplist?.remove(key);
 
-      notifyListeners();
+      for (var key in keylist) _maplist?.remove(key); // 이미 담당자가 있는 수업을 _maplist에서 제거합니다.
+
+      notifyListeners(); // 데이터 변경을 UI에 알립니다.
     });
 
     return listen;
